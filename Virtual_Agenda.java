@@ -8,9 +8,12 @@
 
 import java.awt.event.*;
 import java.awt.*;
+import java.util.TimeZone;
 import javax.swing.*;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
+import com.jcalendar.pane.calendar.CalendarPane;
+import com.jcalendar.pane.clock.*;
 
 class Virtual_Agenda{
     public static void main (String[] args){
@@ -33,13 +36,13 @@ class Virtual_Agenda{
 
         JPanel calendar = new JPanel();
         calendar.setBounds(400,0,400,400);
-        calendar.setBackground(Color.white);
         calendar(calendar); // Will have to add more parameters to this
         gui.add(calendar);
         calendar.setLayout(null);
 
         // Dispalys the GUI window
-        gui.setSize(800,400);
+        gui.setSize(680,400);
+        gui.setFocusable(true); // Necessary for keylistener
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Kill program if closed
         gui.setLayout(null);
         gui.setLocationRelativeTo(null); // Window appears in middle
@@ -86,7 +89,7 @@ class Virtual_Agenda{
 
         // Button: Complete Task --------------------------------------------
         JButton completeTask = new JButton("🗸");
-        completeTask.setBounds(300,315,75,25);
+        completeTask.setBounds(310,315,65,25);
         completeTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a){
                 int row = table.getSelectedRow();
@@ -100,17 +103,21 @@ class Virtual_Agenda{
         });
         agenda.add(completeTask);
 
-        // Button: Settings --------------------------------------------
-        JButton settings = new JButton("⚙");
-        settings.setBounds(230,315,50,25);
-        settings.addActionListener(new ActionListener() {
+        // Button: Clear Selection --------------------------------------------
+        JButton clear = new JButton("Clear Selection");
+        clear.setBounds(200,315,100,25);
+        clear.setMargin(new Insets(0, 0, 0, 0)); // Destroys default button-text margins
+        clear.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a){
-                settingsWindow(); // Creates a new window for settings
+                table.clearSelection();
             }
         });
-        agenda.add(settings);
+        agenda.add(clear);
+
+        // Date Picker
     }
 
+    /* Code will remain here in case if needed in the future
     public static void settingsWindow(){
         // Initalize new window
         JFrame settings = new JFrame("Settings");
@@ -137,16 +144,23 @@ class Virtual_Agenda{
         settings.setResizable(false); // Cannot maximize window
         settings.setVisible(true);
     }
-
-    public static void completeTask(){
-        // Deletes a task from table
-    }
+    */
 
     public static void saveTask(){
         // Creates/overwrites the file containg the to do list data
     }
 
     public static void calendar (JPanel calendar){
+        // Calendar
+        CalendarPane cal = new CalendarPane(TimeZone.getTimeZone("America/Toronto"));
+        cal.setBounds(0,10,248,138);
+        calendar.add(cal);
 
+        // Clock
+        Clock clock = new Clock();
+        clock.setTimeZone(TimeZone.getTimeZone("America/Toronto"));
+        clock.setBounds(47,165,250,150);
+        clock.startClock();
+        calendar.add(clock);
     }
 }
