@@ -63,8 +63,8 @@ class Virtual_Agenda{
         // JTable Config
         table.getTableHeader().setResizingAllowed(false); // Cannot resize columns
         table.getTableHeader().setReorderingAllowed(false); // Cannot reorder colums
-        //sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Always have a scroll bar appear
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures the user cannot multi select rows
+        sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Always have a scroll bar appear
+        //table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures the user cannot multi select rows
         agenda.add(sp);
 
         // Button: Add Task -------------------------------------------------
@@ -92,9 +92,17 @@ class Virtual_Agenda{
         completeTask.setBounds(310,315,65,25);
         completeTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a){
-                int row = table.getSelectedRow();
                 try{
-                    model.removeRow(row); // Send data to file before removing here?
+                    for (int j = 0; j < 3; j++){ // Lowest IQ solution to multiple button presses to achieve something. Sue me.
+                        for (int i = 1; i <= table.getSelectedRows().length; i++){
+                            model.removeRow(table.getSelectedRow()); // Send data to file before removing here?
+                            model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()); // Weird bug fix here. JTable would retain some data from removed row
+                            model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()+1); // These lines here will clear the data before removing the row
+
+                        }
+                    }   
+                    // Note: After doing multiple trials with these added lines, I couldn't get the bug to happen again, 
+                    //       but I can't confirm if the bug is really gone or not...
                 }
                 catch (Exception e){ // If there is no row selected, do nothing
                     return;
