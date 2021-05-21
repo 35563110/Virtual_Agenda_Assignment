@@ -64,7 +64,7 @@ class Virtual_Agenda{
         table.getTableHeader().setResizingAllowed(false); // Cannot resize columns
         table.getTableHeader().setReorderingAllowed(false); // Cannot reorder colums
         //sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Always have a scroll bar appear
-        //table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures the user cannot multi select rows
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures the user cannot multi select rows
         agenda.add(sp);
 
         // Button: Add Task -------------------------------------------------
