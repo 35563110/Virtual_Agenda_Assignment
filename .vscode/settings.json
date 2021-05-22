@@ -8,8 +8,7 @@
             "/Users/awesomeanissa/Downloads/School/Computer Science 11/jcalendar-1.4/lib/junit-4.6.jar"
         ],
         "exclude": [
-            "lib/javafx-swt.jar",
-            "lib/jcalendar-1.4.jar"
+            "lib/javafx-swt.jar"
         ]
     }
 }
