@@ -1,10 +1,15 @@
 {
     "java.project.referencedLibraries": {
         "include": [
-            "lib/**/*.jar"
+            "lib/**/*.jar",
+            "/Users/awesomeanissa/Downloads/School/Computer Science 11/jcalendar-1.4/lib/jcalendar-1.4.jar",
+            "/Users/awesomeanissa/Downloads/School/Computer Science 11/jcalendar-1.4/lib/jgoodies-common-1.2.0.jar",
+            "/Users/awesomeanissa/Downloads/School/Computer Science 11/jcalendar-1.4/lib/jgoodies-looks-2.4.1.jar",
+            "/Users/awesomeanissa/Downloads/School/Computer Science 11/jcalendar-1.4/lib/junit-4.6.jar"
         ],
         "exclude": [
-            "lib/javafx-swt.jar"
+            "lib/javafx-swt.jar",
+            "lib/jcalendar-1.4.jar"
         ]
     }
 }
