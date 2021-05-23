@@ -23,6 +23,10 @@ class Virtual_Agenda{
         initalizeMainUI();
     }
 
+    /*
+     * @author: Carl Wang
+     * Base of operations for initalizing the UI
+     * */
     public static void initalizeMainUI(){
         // Initalizes GUI window
         JFrame gui = new JFrame("Virtual Agenda");
@@ -50,6 +54,11 @@ class Virtual_Agenda{
         gui.setVisible(true);
     }
 
+    /*
+     * @author - Carl Wang
+     * 
+     * @param JPanel agenda - Deals with stuff on the left side of the GUI
+     * */
     public static void agenda (JPanel agenda){ // Going to need string data
         // JTable -----------------------------------------------------
         DefaultTableModel model = new DefaultTableModel(); // Table coloum and row data
@@ -121,8 +130,6 @@ class Virtual_Agenda{
             }
         });
         agenda.add(clear);
-
-        // Date Picker
     }
 
     /* Code will remain here in case if needed in the future
@@ -158,6 +165,10 @@ class Virtual_Agenda{
         // Creates/overwrites the file containg the to do list data
     }
 
+    /*
+     * @author - Carl Wang
+     * Method deals with things that appear on the right side of the GUI
+     * */
     public static void calendar (JPanel calendar){
         // Calendar
         CalendarPane cal = new CalendarPane(TimeZone.getTimeZone("America/Toronto"));
