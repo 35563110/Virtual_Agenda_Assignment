@@ -14,8 +14,13 @@ import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import com.jcalendar.pane.calendar.CalendarPane;
 import com.jcalendar.pane.clock.*;
+import java.util.ArrayList;
+//import java.util.Collection;
 
 class Virtual_Agenda{
+
+    static String input = "hi";
+    static int count = 0;
     public static void main (String[] args){
         // Read files?
 
@@ -73,15 +78,33 @@ class Virtual_Agenda{
         addTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a){
                 model.addRow(new Object[]{"", ""}); // Adds a new row to the JTable
-            }
+            } 
         });
         agenda.add(addTask);
-
+        
         // Button: save Task -----------------------------------------------
         JButton saveTask = new JButton ("Save");
         saveTask.setBounds(90,315,75,25);
+        // ANISSA: ArrayList used to store all the tasks the user inputs (put outside so it doesn't keep resetting)
+        ArrayList<String> taskList = new ArrayList<>();
+        
         saveTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a){
+
+                // ANISSA: Getting the data from the selected row and first column, converting it into a string and saving
+                // the info into an arrayList called taskList
+                int column = 0; // column for the tasks
+                int row = table.getSelectedRow(); // the location of the selected row
+                Object userInput = table.getModel().getValueAt(row, column); // getting data from the location of the row and column
+                String task = userInput.toString(); // converting that data from an object to a string
+
+                // Doing the same thing as above but with the due dates
+                int column2 = 1;
+                Object userDueDate = table.getModel().getValueAt(row,column2);
+                String dueDate = userDueDate.toString();
+                // Storing both the task and the due date into the array, 'taskList'
+                taskList.add(task + ": " + dueDate); 
+
                 saveTask(); // Method that stores all data to file
             }
         });
