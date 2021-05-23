@@ -18,9 +18,6 @@ import java.util.ArrayList;
 //import java.util.Collection;
 
 class Virtual_Agenda{
-
-    static String input = "hi";
-    static int count = 0;
     public static void main (String[] args){
         // Read files?
 
@@ -87,7 +84,7 @@ class Virtual_Agenda{
         saveTask.setBounds(90,315,75,25);
         // ANISSA: ArrayList used to store all the tasks the user inputs (put outside so it doesn't keep resetting)
         ArrayList<String> taskList = new ArrayList<>();
-        
+
         saveTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a){
 
