@@ -84,7 +84,7 @@ class Virtual_Agenda{
         saveTask.setBounds(90,315,75,25);
         // ANISSA: ArrayList used to store all the tasks the user inputs (put outside so it doesn't keep resetting)
         ArrayList<String> taskList = new ArrayList<>();
-
+        
         saveTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a){
 
@@ -100,11 +100,11 @@ class Virtual_Agenda{
                 Object userDueDate = table.getModel().getValueAt(row,column2);
                 String dueDate = userDueDate.toString();
                 // Storing both the task and the due date into the array, 'taskList'
-                taskList.add(task + ": " + dueDate); 
-
+                taskList.add(task + " - " + dueDate); 
+                System.out.println(taskList);
                 saveTask(); // Method that stores all data to file
             }
-        });
+        }); 
         agenda.add(saveTask);
 
         // Button: Complete Task --------------------------------------------
@@ -115,10 +115,20 @@ class Virtual_Agenda{
                 try{
                     for (int j = 0; j < 3; j++){ // Lowest IQ solution to multiple button presses to achieve something. Sue me.
                         for (int i = 1; i <= table.getSelectedRows().length; i++){
+                            // ANISSA: Adding an note to the completed tasks so in the array list, that element is altered to add
+                            // the COMPLETED note
+                            int rowNum = table.getSelectedRow();    // getting the selected row
+                            String dataForTask = table.getModel().getValueAt(rowNum, 0).toString(); // converting data to string
+                            String dataForDue = table.getModel().getValueAt(rowNum, 1).toString();
+                            // putting the info together exactly like when it's stored for when a  user adds a task
+                            String dataFullRow = dataForTask + " - " + dataForDue; 
+                            // finding the index of that string in the arrayList to alter and add the COMPLETED note
+                            int index = taskList.indexOf(dataFullRow);
+                            taskList.set(rowNum,"COMPLETED: " + taskList.get(index));
+                            
                             model.removeRow(table.getSelectedRow()); // Send data to file before removing here?
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()); // Weird bug fix here. JTable would retain some data from removed row
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()+1); // These lines here will clear the data before removing the row
-
                         }
                     }   
                     // Note: After doing multiple trials with these added lines, I couldn't get the bug to happen again, 
