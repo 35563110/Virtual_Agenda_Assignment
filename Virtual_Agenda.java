@@ -115,6 +115,7 @@ class Virtual_Agenda{
                 try{
                     for (int j = 0; j < 3; j++){ // Lowest IQ solution to multiple button presses to achieve something. Sue me.
                         for (int i = 1; i <= table.getSelectedRows().length; i++){
+                            
                             // ANISSA: Adding an note to the completed tasks so in the array list, that element is altered to add
                             // the COMPLETED note
                             int rowNum = table.getSelectedRow();    // getting the selected row
