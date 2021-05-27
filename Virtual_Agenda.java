@@ -141,7 +141,9 @@ class Virtual_Agenda{
                             // finding the index of that string in the arrayList to alter and add the COMPLETED note
                             int index = taskList.indexOf(dataFullRow);
                             taskList.set(rowNum,"COMPLETED: " + taskList.get(index));
-                            
+                            System.out.println(taskList);
+                            System.out.println(index);
+                            saveTask(taskList, dueDateList);
                             model.removeRow(table.getSelectedRow()); // Send data to file before removing here?
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()); // Weird bug fix here. JTable would retain some data from removed row
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()+1); // These lines here will clear the data before removing the row
@@ -205,12 +207,10 @@ class Virtual_Agenda{
         FileWriter fw = new FileWriter(fileName);
         BufferedWriter br = new BufferedWriter(fw);
       
-        br.write("Due Date, Task");   // only displayed once, hence outside of for loop
         br.write("Task, Due Date");   // only displayed once, hence outside of for loop
         br.newLine();
         // the for loop iterates through the elements of the array, executing code tailored to each element 
         for(int i = 0; i < taskList.size(); i++){
-          br.write(dueDateList.get(i) + "," + taskList.get(i));
           br.write(taskList.get(i) + "," +  dueDateList.get(i));
           br.newLine();
         }
