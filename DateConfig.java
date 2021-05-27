@@ -1,4 +1,7 @@
 /*
+
+@author - carl wang
+
 Objective: Convert any entered dates to the format: (DAY OF WEEK) (MONTH) (DAY), (YEAR)
 
 Process:
