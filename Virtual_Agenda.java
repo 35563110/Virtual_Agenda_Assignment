@@ -94,7 +94,6 @@ class Virtual_Agenda{
         // ANISSA: ArrayList used to store all the tasks the user inputs (put outside so it doesn't keep resetting)
         // moved the arraylist back a few lines since it just didnt exist with the complete task button for some reaso
         ArrayList<String> taskList = new ArrayList<>();
-        ArrayList<String> dueDateList = new ArrayList<>();
         saveTask.addActionListener(new ActionListener() {
         
             public void actionPerformed(ActionEvent a){
@@ -110,13 +109,10 @@ class Virtual_Agenda{
                 Object userDueDate = table.getModel().getValueAt(row,column2);
                 String dueDate = userDueDate.toString();
                 // Storing both the task and the due date into the array, 'taskList'
-                taskList.add(task); 
-                dueDateList.add(dueDate);
+                taskList.add(task + ", " + dueDate); 
 
                 System.out.println(taskList);
-                System.out.println(dueDateList);
-                saveTask(taskList, dueDateList); // Method that stores all data to file
-                
+                saveTask(taskList); // Method that stores all data to file
                 
                 //There is a bug when saving that you have to one exactly one blank line to successfully save to file.
             }
@@ -135,15 +131,16 @@ class Virtual_Agenda{
                             // the COMPLETED note
                             int rowNum = table.getSelectedRow();    // getting the selected row
                             String dataForTask = table.getModel().getValueAt(rowNum, 0).toString(); // converting data to string
-                            // String dataForDue = table.getModel().getValueAt(rowNum, 1).toString();
-                            // putting the info together exactly like when it's stored for when a  user adds a task
-                            String dataFullRow = dataForTask; 
+                            String dataForDue = table.getModel().getValueAt(rowNum, 1).toString();
                             // finding the index of that string in the arrayList to alter and add the COMPLETED note
-                            int index = taskList.indexOf(dataFullRow);
+                            int index = taskList.indexOf(dataForTask + ", " + dataForDue);
                             taskList.set(rowNum,"COMPLETED: " + taskList.get(index));
+                           
                             System.out.println(taskList);
-                            System.out.println(index);
-                            saveTask(taskList, dueDateList);
+
+                            // ISSUE: The "completed" task is overwriting the completed task that was in the same row
+                           
+                            saveTask(taskList);
                             model.removeRow(table.getSelectedRow()); // Send data to file before removing here?
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()); // Weird bug fix here. JTable would retain some data from removed row
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()+1); // These lines here will clear the data before removing the row
@@ -199,7 +196,7 @@ class Virtual_Agenda{
     */
 
 
-    public static void saveTask(ArrayList<String> taskList, ArrayList<String> dueDateList){ //changed paramater to the arraylist
+    public static void saveTask(ArrayList<String> taskList){ //changed paramater to the arraylist
       try {
      //Serena's Code:
         // create file: 
@@ -211,7 +208,7 @@ class Virtual_Agenda{
         br.newLine();
         // the for loop iterates through the elements of the array, executing code tailored to each element 
         for(int i = 0; i < taskList.size(); i++){
-          br.write(taskList.get(i) + "," +  dueDateList.get(i));
+          br.write(taskList.get(i));
           br.newLine();
         }
       
