@@ -206,11 +206,11 @@ class Virtual_Agenda{
         FileWriter fw = new FileWriter(fileName);
         BufferedWriter br = new BufferedWriter(fw);
       
-        br.write("Due Date, Task");   // only displayed once, hence outside of for loop
+        br.write("Task, Due Date");   // only displayed once, hence outside of for loop
         br.newLine();
         // the for loop iterates through the elements of the array, executing code tailored to each element 
         for(int i = 0; i < taskList.size(); i++){
-          br.write(dueDateList.get(i) + "," + taskList.get(i));
+          br.write(taskList.get(i) + "," +  dueDateList.get(i));
           br.newLine();
         }
       
