@@ -134,12 +134,10 @@ class Virtual_Agenda{
                             String dataForDue = table.getModel().getValueAt(rowNum, 1).toString();
                             // finding the index of that string in the arrayList to alter and add the COMPLETED note
                             int index = taskList.indexOf(dataForTask + ", " + dataForDue);
-                            taskList.set(rowNum,"COMPLETED: " + taskList.get(index));
-                           
+                            // Editing the taskList to add the "Completed" note to the task based on its index
+                            taskList.set(index,"COMPLETED: " + taskList.get(index));
                             System.out.println(taskList);
-
-                            // ISSUE: The "completed" task is overwriting the completed task that was in the same row
-                           
+           
                             saveTask(taskList);
                             model.removeRow(table.getSelectedRow()); // Send data to file before removing here?
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()); // Weird bug fix here. JTable would retain some data from removed row
