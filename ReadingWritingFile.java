@@ -265,9 +265,6 @@ class Virtual_Agenda{
         calendar.add(clock);
 
     }
-<<<<<<< Updated upstream
-}
-=======
 
     public static void populateArrays (String fromFile, ArrayList<String> tasks, ArrayList<String> dueDates){
         String taskString = "";
@@ -294,4 +291,3 @@ class Virtual_Agenda{
         }
     }
 }
->>>>>>> Stashed changes
