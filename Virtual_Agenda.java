@@ -72,7 +72,7 @@ class Virtual_Agenda{
         DefaultTableModel model = new DefaultTableModel(); // Table coloum and row data
         model.addColumn("Task Name");
         model.addColumn("Due Date");
-        populateModel(model, tasks, dueDates); 
+        addRows(model, tasks, dueDates);
         JTable table = new JTable(model);
         JScrollPane sp = new JScrollPane(table);
         sp.setBounds(5,5,370,300);
@@ -231,10 +231,10 @@ class Virtual_Agenda{
           String line; 
           BufferedReader br = new BufferedReader(new FileReader("Task_List.csv")); // FileReader opens csv file
           while ((line = br.readLine()) != null){     // read file line by line until end of file
-            String[] taskArray = line.split(",");    // store data in array, and split strings given comma delimiter
+            String[] taskArray = line.split("/,/");    // store data in array, and split strings given comma delimiter
             for (int i = 0; i < taskArray.length; i++){
               System.out.println(taskArray[i]);
-              populateArrays(taskArray[i], tasks, dueDates);
+                populateArrays(taskArray[i], tasks, dueDates);
             }
           }
           br.close(); 
@@ -262,28 +262,29 @@ class Virtual_Agenda{
 
     }
 
-    public static void populateArrays (String fromFile, ArrayList<String> tasks, ArrayList<String> dueDates){
+    public static void populateArrays (String fileData, ArrayList<String> tasks, ArrayList<String> dueDates){
         String taskString = "";
         String dueString = "";
 
-        int divider = fromFile.indexOf(","); // Crucial part of code
+        int divider = fileData.indexOf(","); // Crucial part of code
 
-        fromFile = fromFile.trim(); // Removes leading and trailing spaces
+        fileData = fileData.trim(); // Removes leading and trailing spaces
 
         try{
-            taskString = fromFile.substring(0, divider);
-            dueString = fromFile.substring(divider+4, fromFile.length());
+            taskString = fileData.substring(0, divider);
+            dueString = fileData.substring(divider+2, fileData.length());
         }
         catch (Exception e){
-
+            taskString = "ERROR";
+            dueString = "ERROR";
         }
         tasks.add(taskString);
         dueDates.add(dueString);
     }
 
-    public static void populateModel (DefaultTableModel model, ArrayList<String> tasks, ArrayList<String> dueDates){
+    public static void addRows (DefaultTableModel model, ArrayList<String> tasks, ArrayList<String> dueDates){
         for (int i = 0; i < tasks.size(); i++){
-            model.addRow(new Object[] {(tasks.get(i)), dueDates.get(i)});
+            model.addRow(new Object[] {tasks.get(i), dueDates.get(i)});
         }
     }
 }
