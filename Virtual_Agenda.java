@@ -23,23 +23,25 @@ import java.io.File;
 
 class Virtual_Agenda{
     public static void main (String[] args){
-       //reads the csv if it already exists to load tasks
-        readCSVFile();
+        //reads the csv if it already exists to load tasks
+        ArrayList<String> tasks = new ArrayList<String>();
+        ArrayList<String> dueDates = new ArrayList<String>();
+        readCSVFile(tasks, dueDates);
         // initalizeMainUI(1, 2, 3, 4, 5); <-- This is how I think it might look
-        initalizeMainUI();
+        initalizeMainUI(tasks, dueDates);
     }
 
     /*
      * @author: Carl Wang
      * Base of operations for initalizing the UI
      * */
-    public static void initalizeMainUI(){
+    public static void initalizeMainUI(ArrayList<String> tasks, ArrayList<String> dueDates){
         // Initalizes GUI window
         JFrame gui = new JFrame("Virtual Agenda");
         // Initalizes JPanels: agenda, calendar
         JPanel agenda = new JPanel();
         agenda.setBounds(10,10,390,390);
-        agenda(agenda); // Will have to add more parameters to this
+        agenda(agenda, tasks, dueDates); // Will have to add more parameters to this
         gui.add(agenda);
         agenda.setLayout(null);
         
@@ -65,11 +67,12 @@ class Virtual_Agenda{
      * 
      * @param JPanel agenda - Deals with stuff on the left side of the GUI
      * */
-    public static void agenda (JPanel agenda){ // Going to need string data
+    public static void agenda (JPanel agenda, ArrayList<String> tasks, ArrayList<String> dueDates){ // Going to need string data
         // JTable -----------------------------------------------------
         DefaultTableModel model = new DefaultTableModel(); // Table coloum and row data
         model.addColumn("Task Name");
         model.addColumn("Due Date");
+        populateModel(model, tasks, dueDates); 
         JTable table = new JTable(model);
         JScrollPane sp = new JScrollPane(table);
         sp.setBounds(5,5,370,300);
@@ -223,14 +226,15 @@ class Virtual_Agenda{
       }
     }
     
-    public static void readCSVFile(){ //remove the parameter as it's not needed to read a file.
+    public static void readCSVFile(ArrayList<String> tasks, ArrayList<String> dueDates){ //remove the parameter as it's not needed to read a file.
       try{
           String line; 
           BufferedReader br = new BufferedReader(new FileReader("Task_List.csv")); // FileReader opens csv file
           while ((line = br.readLine()) != null){     // read file line by line until end of file
-            String[] taskArray = line.split("/,/");    // store data in array, and split strings given comma delimiter
+            String[] taskArray = line.split(",");    // store data in array, and split strings given comma delimiter
             for (int i = 0; i < taskArray.length; i++){
               System.out.println(taskArray[i]);
+              populateArrays(taskArray[i], tasks, dueDates);
             }
           }
           br.close(); 
@@ -256,5 +260,30 @@ class Virtual_Agenda{
         clock.startClock();
         calendar.add(clock);
 
+    }
+
+    public static void populateArrays (String fromFile, ArrayList<String> tasks, ArrayList<String> dueDates){
+        String taskString = "";
+        String dueString = "";
+
+        int divider = fromFile.indexOf(","); // Crucial part of code
+
+        fromFile = fromFile.trim(); // Removes leading and trailing spaces
+
+        try{
+            taskString = fromFile.substring(0, divider);
+            dueString = fromFile.substring(divider+4, fromFile.length());
+        }
+        catch (Exception e){
+
+        }
+        tasks.add(taskString);
+        dueDates.add(dueString);
+    }
+
+    public static void populateModel (DefaultTableModel model, ArrayList<String> tasks, ArrayList<String> dueDates){
+        for (int i = 0; i < tasks.size(); i++){
+            model.addRow(new Object[] {(tasks.get(i)), dueDates.get(i)});
+        }
     }
 }
