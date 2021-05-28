@@ -14,13 +14,14 @@ import javax.swing.table.DefaultTableModel;
 import com.jcalendar.pane.calendar.CalendarPane;
 import com.jcalendar.pane.clock.*;
 import java.util.ArrayList;
-import java.io.FileReader;
-import java.io.BufferedReader;
+//import java.io.FileReader;
+//import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.File;
+import java.util.Scanner;
 
 class VA{
    public static void main (String[] args){
@@ -207,7 +208,7 @@ class VA{
        BufferedWriter br = new BufferedWriter(fw);
        PrintWriter pw = new PrintWriter(br);
      
-       pw.println("Task, Due Date");   // only displayed once, hence outside of for loop
+       //pw.println("Task, Due Date");   // only displayed once, hence outside of for loop
        //br.newLine();
        // the for loop iterates through the elements of the array, executing code tailored to each element 
        for(int i = 0; i < taskList.size(); i++){
@@ -232,17 +233,15 @@ class VA{
    
    public static void readCSVFile(ArrayList<String> tasks, ArrayList<String> dueDates){ //remove the parameter as it's not needed to read a file.
      try{
-         String line; 
-         BufferedReader br = new BufferedReader(new FileReader("Task_List.csv")); // FileReader opens csv file
-         
-         while ((line = br.readLine()) != null){     // read file line by line until end of file
-           String[] taskArray = line.split("~");    // store data in array, and split strings given comma delimiter
-           for (int i = 0; i < taskArray.length; i++){
-             System.out.println(taskArray[i]);
-             populateArrays(taskArray[i], tasks, dueDates);
-           }
-         }
-         br.close(); 
+        File taskFile = new File("Task_List.csv");
+        Scanner reader = new Scanner (taskFile);
+        reader.useDelimiter("~");
+        while (reader.hasNext()){
+            String line = reader.nextLine();
+            System.out.println(line);
+            populateArrays(line, tasks, dueDates);
+        }
+        reader.close();
      }
      catch(IOException e){
        System.out.println("Error reading file.");
@@ -271,13 +270,13 @@ class VA{
        String taskString = "";
        String dueString = "";
 
-       int divider = fromFile.indexOf("~ "); // Crucial part of code
+       int divider = fromFile.indexOf("~"); // Crucial part of code
 
        fromFile = fromFile.trim(); // Removes leading and trailing spaces
 
        try{
            taskString = fromFile.substring(0, divider);
-           dueString = fromFile.substring(divider+2, fromFile.length());
+           dueString = fromFile.substring(divider+1, fromFile.length());
        }
        catch (Exception e){
 
