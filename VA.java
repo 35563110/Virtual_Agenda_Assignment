@@ -106,6 +106,9 @@ class VA{
                // the info into an arrayList called taskList
                int column = 0; // column for the tasks
                int row = table.getSelectedRow(); // the location of the selected row
+               if (table.isEditing()){
+                  table.getCellEditor().stopCellEditing(); // Fixes bug
+               }
                Object userInput = table.getModel().getValueAt(row, column); // getting data from the location of the row and column
                String task = userInput.toString(); // converting that data from an object to a string
 
