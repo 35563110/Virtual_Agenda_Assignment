@@ -113,7 +113,7 @@ class Virtual_Agenda{
                 Object userDueDate = table.getModel().getValueAt(row,column2);
                 String dueDate = userDueDate.toString();
                 // Storing both the task and the due date into the array, 'taskList'
-                taskList.add(task + ", " + dueDate); 
+                taskList.add(task + "/,/ " + dueDate); 
 
                 System.out.println(taskList);
                 saveTask(taskList); // Method that stores all data to file
