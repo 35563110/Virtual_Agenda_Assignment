@@ -15,8 +15,6 @@ import javax.swing.table.DefaultTableModel;
 import com.jcalendar.pane.calendar.CalendarPane;
 import com.jcalendar.pane.clock.*;
 import java.util.ArrayList;
-//import java.io.FileReader;
-//import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.BufferedWriter;
@@ -30,14 +28,19 @@ class VA{
         ArrayList<String> tasks = new ArrayList<String>();
         ArrayList<String> dueDates = new ArrayList<String>();
         ArrayList<String> taskList = new ArrayList<String>(); 
-        readCSVFile(tasks, dueDates, taskList);
-        // initalizeMainUI(1, 2, 3, 4, 5); <-- This is how I think it might look
+        
+        readCSVFile(tasks, dueDates, taskList); // Reads CSV file for incomplete
+
         initalizeMainUI(tasks, dueDates, taskList);
     }
 
-    /*
+    /**
      * @author: Carl Wang 
      * Base of operations for initalizing the UI
+     * 
+     * @param tasks - Contains the incomplete task names
+     * @param duedates - Contains the incomplete task due dates
+     * @param taskList - Contains data from both tasks and dueDates
      */
     public static void initalizeMainUI(ArrayList<String> tasks, ArrayList<String> dueDates, ArrayList<String> taskList) {
         // Initalizes GUI window
@@ -45,19 +48,18 @@ class VA{
         // Initalizes JPanels: agenda, calendar
         JPanel agenda = new JPanel();
         agenda.setBounds(10, 10, 390, 390);
-        agenda(agenda, tasks, dueDates, taskList); // Will have to add more parameters to this
+        agenda(agenda, tasks, dueDates, taskList);
         gui.add(agenda);
         agenda.setLayout(null);
 
         JPanel calendar = new JPanel();
         calendar.setBounds(400, 0, 400, 400);
-        calendar(calendar); // Will have to add more parameters to this
+        calendar(calendar); 
         gui.add(calendar);
-        calendar.setLayout(null);
+        calendar.setLayout(null); // No layout
 
         // Dispalys the GUI window
         gui.setSize(680, 400);
-        gui.setFocusable(true); // Necessary for keylistener
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Kill program if closed
         gui.setLayout(null);
         gui.setLocationRelativeTo(null); // Window appears in middle
@@ -65,10 +67,14 @@ class VA{
         gui.setVisible(true);
     }
 
-    /*
+    /** 
      * @author - Carl Wang
+     * Method deals with the contents of the gui left side
      * 
-     * @param JPanel agenda - Deals with stuff on the left side of the GUI
+     * @param agenda - The agenda JPanel
+     * @param tasks - Contains the incomplete task names
+     * @param duedates - Contains the incomplete task due dates
+     * @param taskList - Contains data from both tasks and dueDates
      */
     public static void agenda(JPanel agenda, ArrayList<String> tasks, ArrayList<String> dueDates, ArrayList<String> taskList) { 
         // JTable -----------------------------------------------------
@@ -104,7 +110,7 @@ class VA{
             public void actionPerformed(ActionEvent a) {
                 populatetaskList(taskList, table);
                 System.out.println(taskList);
-                saveTask(taskList); // Method that stores all data to file
+                saveTask(taskList); // Method that stores all data to file (incomplete tasks)
             }
         });
         agenda.add(saveTask);
@@ -118,7 +124,7 @@ class VA{
             public void actionPerformed(ActionEvent a) {
                 try {
                     populatetaskList(taskList, table);
-                    for (int j = 0; j < 3; j++) { // Lowest IQ solution to multiple button presses to achieve something. Sue me.
+                    for (int j = 0; j < 5; j++) { // Lowest IQ solution to multiple button presses to achieve something. Sue me.
                         for (int i = 1; i <= table.getSelectedRows().length; i++) {
 
                             // ANISSA: Adding a note to the completed tasks so in the array list, that element is altered to add the COMPLETED note
@@ -138,7 +144,7 @@ class VA{
                             saveTask(taskList); // calling the method to saveTask to update the CSV file
                             saveComplete(completeTasks);
                             model.removeRow(table.getSelectedRow()); // Send data to file before removing here?
-                            model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()); // Weird bug fix here. JTable would retain some data from removed row
+                            model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()); // Bug fix here. JTable would retain some data from removed row
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn() + 1); // These lines here will clear the data before removing the row
                         }
                     }
@@ -156,13 +162,18 @@ class VA{
         clear.setMargin(new Insets(0, 0, 0, 0)); // Destroys default button-text margins
         clear.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a) {
-                table.clearSelection();
+                table.clearSelection(); // Clear the row selecton of the JTable
             }
         });
         agenda.add(clear);
     }
 
-    public static void saveTask(ArrayList<String> taskList) { // changed paramater to the arraylist
+    /**
+     * @author - 
+     * 
+     * @param taskList contains data about the incomplete task names and due dates
+     */
+    public static void saveTask(ArrayList<String> taskList) {
         try {
             // Serena's Code:
             // create file:
@@ -196,6 +207,14 @@ class VA{
         taskList.clear(); // Clears all data in arraylist
     }
    
+    /**
+     * @author - 
+     * Method reads the csv file containing the incomplete tasks
+     * 
+     * @param tasks - Contains the incomplete task names
+     * @param duedates - Contains the incomplete task due dates
+     * @param taskList - Contains data from both tasks and dueDates
+     */
     public static void readCSVFile(ArrayList<String> tasks, ArrayList<String> dueDates, ArrayList<String> taskList){ //remove the parameter as it's not needed to read a file.
         try{
             File taskFile = new File("Task_List.csv");
@@ -216,9 +235,11 @@ class VA{
         taskList.clear(); // Clears all data in arraylist
     }
 
-    /*
+    /**
      * @author - Carl Wang 
      * Method deals with things that appear on the right side of the GUI
+     * 
+     * @param calendar - The JPanel calendar
      */
     public static void calendar(JPanel calendar) {
         // Calendar
@@ -234,6 +255,14 @@ class VA{
         calendar.add(clock);
     }
 
+    /**
+     * @author - Carl Wang
+     * Method takes data from the CSV file and converts it into dataTypes
+     * 
+     * @param fromFile - Data from the incomplete tasks csv file
+     * @param tasks - Arraylist (String) that will contain the task name
+     * @param dueDates - Arraylist (String) that will contain the task due date
+    **/
     public static void populateArrays (String fromFile, ArrayList<String> tasks, ArrayList<String> dueDates){
         String taskString = "";
         String dueString = "";
@@ -255,17 +284,26 @@ class VA{
         System.out.println(dueDates);
     }
 
+    /**
+     * @author - Carl Wang
+     * Method populates the DefaultTableModel
+     * 
+     * @param model - DefaultTableModel
+     * @param tasks - Arraylist (String) that contain the task name
+     * @param dueDates - Arraylist (String) that contain the task due date
+    **/
     public static void populateModel (DefaultTableModel model, ArrayList<String> tasks, ArrayList<String> dueDates){
         for (int i = 0; i < tasks.size(); i++){
             model.addRow(new Object[] {(tasks.get(i)), dueDates.get(i)});
         }
     }
+
     /**
      * @author - Anissa Rampersaud
      * Description: Takes info from completeTasks arrayList and puts onto a separate CSV called "Complete_Tasks.csv"
      * @param completeTasks - Calling completeTasks arrayList to get data
      */
-    public static void saveComplete (ArrayList<String> completeTasks){
+     public static void saveComplete (ArrayList<String> completeTasks){
         try{
             PrintWriter writeSave = new PrintWriter("Complete_Tasks.csv");
             writeSave.print("");
@@ -297,6 +335,12 @@ class VA{
         }
     }
 
+    /**
+     * @author - Anissa
+     * 
+     * @param taskList - Contains incomplete tasks
+     * @param table - The JTable and its data
+     */
     public static void populatetaskList (ArrayList<String> taskList, JTable table){
         // ANISSA: Getting the data from the selected row and first column, converting it into a string and saving
         // the info into an arrayList called taskList
@@ -318,7 +362,7 @@ class VA{
     }
 }
 
-/* Code will remain here in case if needed in the future
+/* Code will remain here in case if needed in the future - Carl
 public static void settingsWindow(){
     // Initalize new window
     JFrame settings = new JFrame("Settings");
