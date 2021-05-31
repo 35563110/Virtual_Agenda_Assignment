@@ -79,11 +79,12 @@ class VA{
         JTable table = new JTable(model);
         JScrollPane sp = new JScrollPane(table);
         sp.setBounds(5, 5, 370, 300);
+        
         // JTable Config
         table.getTableHeader().setResizingAllowed(false); // Cannot resize columns
         table.getTableHeader().setReorderingAllowed(false); // Cannot reorder colums
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Always have a scroll bar appear
-        //table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures theuser cannot multi select rows
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures theuser cannot multi select rows
         agenda.add(sp);
 
         // Button: Add Task -------------------------------------------------
@@ -132,6 +133,7 @@ class VA{
         ArrayList<String> completeTasks = new ArrayList<>();
         completeTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a) {
+                System.out.println("Hello");
                 try {
                     for (int j = 0; j < 3; j++) { // Lowest IQ solution to multiple button presses to achieve something. Sue me.
                         for (int i = 1; i <= table.getSelectedRows().length; i++) {
@@ -179,11 +181,6 @@ class VA{
 
     public static void saveTask(ArrayList<String> taskList) { // changed paramater to the arraylist
         try {
-            // Carl: 
-            PrintWriter writer = new PrintWriter("Task_List.csv");
-            writer.print(""); // Clears file
-            writer.close();
-
             // Serena's Code:
             // create file:
             File fileName = new File("Task_List.csv");
@@ -213,6 +210,7 @@ class VA{
         catch (IOException e) {
             System.out.println("Error writing to file.");
         }
+        taskList.clear(); // Clears all data in arraylist
     }
    
     public static void readCSVFile(ArrayList<String> tasks, ArrayList<String> dueDates, ArrayList<String> taskList){ //remove the parameter as it's not needed to read a file.
@@ -232,6 +230,7 @@ class VA{
         catch(IOException e){
         System.out.println("Error reading file.");
         }
+        taskList.clear(); // Clears all data in arraylist
     }
 
     /*
