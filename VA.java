@@ -29,7 +29,7 @@ class VA{
         // reads the csv if it already exists to load tasks
         ArrayList<String> tasks = new ArrayList<String>();
         ArrayList<String> dueDates = new ArrayList<String>();
-        ArrayList<String> taskList = new ArrayList<>(); 
+        ArrayList<String> taskList = new ArrayList<String>(); 
         readCSVFile(tasks, dueDates, taskList);
         // initalizeMainUI(1, 2, 3, 4, 5); <-- This is how I think it might look
         initalizeMainUI(tasks, dueDates, taskList);
@@ -102,24 +102,7 @@ class VA{
         saveTask.setBounds(90, 315, 75, 25);
         saveTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a) {
-                // ANISSA: Getting the data from the selected row and first column, converting it into a string and saving
-                // the info into an arrayList called taskList
-                int column = 0; // column for the tasks
-                if (table.isEditing()) {
-                    table.getCellEditor().stopCellEditing(); // Fixes bug. Cancels editing once the save button is hit
-                }
-                for (int i = 0; i < table.getRowCount(); i++){
-                    Object userInput = table.getModel().getValueAt(i, column); // getting data from the location of the row and column
-                    String task = userInput.toString(); // converting that data from an object to a string
-    
-                    // Doing the same thing as above but with the due dates
-                    int column2 = 1;
-                    Object userDueDate = table.getModel().getValueAt(i, column2);
-                    String dueDate = userDueDate.toString();
-                    // Storing both the task and the due date into the array, 'taskList'
-                    taskList.add(task + "~" + dueDate);
-                }
-
+                populatetaskList(taskList, table);
                 System.out.println(taskList);
                 saveTask(taskList); // Method that stores all data to file
             }
@@ -133,8 +116,8 @@ class VA{
         ArrayList<String> completeTasks = new ArrayList<>();
         completeTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a) {
-                System.out.println("Hello");
                 try {
+                    populatetaskList(taskList, table);
                     for (int j = 0; j < 3; j++) { // Lowest IQ solution to multiple button presses to achieve something. Sue me.
                         for (int i = 1; i <= table.getSelectedRows().length; i++) {
 
@@ -184,7 +167,7 @@ class VA{
             // Serena's Code:
             // create file:
             File fileName = new File("Task_List.csv");
-            FileWriter fw = new FileWriter(fileName, true);
+            FileWriter fw = new FileWriter(fileName, false);
             BufferedWriter br = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(br);
 
@@ -294,6 +277,7 @@ class VA{
             PrintWriter pw = new PrintWriter(br);
 
             for (int i = 0; i < completeTasks.size(); i++) {
+                br.newLine();
                 br.write(completeTasks.get(i));
                 br.newLine();
             }
@@ -310,6 +294,26 @@ class VA{
         }
         catch(IOException e){
             System.out.println("Error writing to Complete_Tasks.csv");
+        }
+    }
+
+    public static void populatetaskList (ArrayList<String> taskList, JTable table){
+        // ANISSA: Getting the data from the selected row and first column, converting it into a string and saving
+        // the info into an arrayList called taskList
+        int column = 0; // column for the tasks
+        if (table.isEditing()) {
+            table.getCellEditor().stopCellEditing(); // Fixes bug. Cancels editing once the save button is hit
+        }
+        for (int i = 0; i < table.getRowCount(); i++){
+            Object userInput = table.getModel().getValueAt(i, column); // getting data from the location of the row and column
+            String task = userInput.toString(); // converting that data from an object to a string
+    
+            // Doing the same thing as above but with the due dates
+            int column2 = 1;
+            Object userDueDate = table.getModel().getValueAt(i, column2);
+            String dueDate = userDueDate.toString();
+            // Storing both the task and the due date into the array, 'taskList'
+            taskList.add(task + "~" + dueDate);
         }
     }
 }
