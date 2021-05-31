@@ -69,7 +69,9 @@ class VA{
 
     /** 
      * @author - Carl Wang
-     * Method deals with the contents of the gui left side
+     * @author - Anissa Rampersaud
+     * Description: Method deals with the contents of the gui left side and handles interactions between the GUI and the various
+     * arrayLists for the CSV's i.e taking in user input to store new tasks, remove finished ones, and add those to their specific CSV's
      * 
      * @param agenda - The agenda JPanel
      * @param tasks - Contains the incomplete task names
@@ -301,6 +303,7 @@ class VA{
     /**
      * @author - Anissa Rampersaud
      * Description: Takes info from completeTasks arrayList and puts onto a separate CSV called "Complete_Tasks.csv"
+     * 
      * @param completeTasks - Calling completeTasks arrayList to get data
      */
      public static void saveComplete (ArrayList<String> completeTasks){
@@ -336,7 +339,9 @@ class VA{
     }
 
     /**
-     * @author - Anissa
+     * @author - Anissa Rampersaud
+     * Description: Method populates the arrayList, taskList, when the user hits save on their added task. This method also
+     * re-populates the arrayList as for CSV function it needs to be cleared, so this populates before it is cleared
      * 
      * @param taskList - Contains incomplete tasks
      * @param table - The JTable and its data
