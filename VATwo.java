@@ -243,7 +243,7 @@ class VATwo{
      */
     public static void readCompleteCSV(ArrayList<String> completeTasks){
         try{
-            // Setting the file to read
+            // Setting the file to read (Carl: This part of the code was done by me)
             File completeFile = new File("Complete_Tasks.csv");
             Scanner reader = new Scanner(completeFile);
             reader.useDelimiter("~");
@@ -368,6 +368,7 @@ class VATwo{
     public static void populatetaskList (ArrayList<String> taskList, JTable table){
         // ANISSA: Getting the data from the selected row and first column, converting it into a string and saving
         // the info into an arrayList called taskList
+        taskList.clear(); // resets tasklist before doing anything to it
         int column = 0; // column for the tasks
         if (table.isEditing()) {
             table.getCellEditor().stopCellEditing(); // Fixes bug. Cancels editing once the save button is hit
