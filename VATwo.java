@@ -29,7 +29,7 @@ class VATwo{
         ArrayList<String> taskList = new ArrayList<String>(); 
         
         readCSVFile(tasks, dueDates, taskList); // Reads CSV file for incomplete
-        readCompleteCSV(taskList);
+        readCompleteCSV(taskList); // reads the CSV with the complete tasks for the arrayList
 
         initalizeMainUI(tasks, dueDates, taskList);
     }
