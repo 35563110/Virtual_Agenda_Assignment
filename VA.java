@@ -29,7 +29,7 @@ class VA{
         ArrayList<String> dueDates = new ArrayList<String>();
         ArrayList<String> taskList = new ArrayList<String>(); 
         
-        readCSVFile(tasks, dueDates, taskList); // Reads CSV file for incomplete
+        readCSVFile(tasks, dueDates, taskList); // Reads CSV file for incomplete tasks
 
         initalizeMainUI(tasks, dueDates, taskList);
     }
@@ -80,7 +80,7 @@ class VA{
      */
     public static void agenda(JPanel agenda, ArrayList<String> tasks, ArrayList<String> dueDates, ArrayList<String> taskList) { 
         // JTable -----------------------------------------------------
-        DefaultTableModel model = new DefaultTableModel(); // Table coloum and row data
+        DefaultTableModel model = new DefaultTableModel(); // Table column and row data
         model.addColumn("Task Name");
         model.addColumn("Due Date");
         populateModel(model, tasks, dueDates);
@@ -90,9 +90,9 @@ class VA{
         
         // JTable Config
         table.getTableHeader().setResizingAllowed(false); // Cannot resize columns
-        table.getTableHeader().setReorderingAllowed(false); // Cannot reorder colums
+        table.getTableHeader().setReorderingAllowed(false); // Cannot reorder columns
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Always have a scroll bar appear
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures theuser cannot multi select rows
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures the user cannot multi select rows
         agenda.add(sp);
 
         // Button: Add Task -------------------------------------------------
@@ -135,7 +135,7 @@ class VA{
                             String dataForDue = table.getModel().getValueAt(rowNum, 1).toString();
                             // finding the index of that string in the arrayList to alter and add the COMPLETED note
                             int index = taskList.indexOf(dataForTask + "~" + dataForDue);
-                            // Adding the data from the taskList to the completesTasks array 
+                            // Adding the data from the taskList to the completeTasks array 
                             // with the "Completed" note to the task based on its index
                             completeTasks.add("COMPLETED: " + taskList.get(index));
                             // Removing the completed tasks from the taskList 
@@ -308,15 +308,17 @@ class VA{
      */
      public static void saveComplete (ArrayList<String> completeTasks){
         try{
+          
             PrintWriter writeSave = new PrintWriter("Complete_Tasks.csv");
             writeSave.print("");
             writeSave.close();
-
+            
+            //creating a new file and intialize the other packages used
             File completeCSV = new File("Complete_Tasks.csv");        
             FileWriter fw = new FileWriter(completeCSV, true);
             BufferedWriter br = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(br);
-
+            //for loop goes through each element in the arraylist and prints it onto the file line
             for (int i = 0; i < completeTasks.size(); i++) {
                 br.newLine();
                 br.write(completeTasks.get(i));
