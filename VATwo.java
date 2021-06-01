@@ -1,4 +1,3 @@
-
 /* 
 * Name: Carl, Anissa, Serena, Vincent
 * Date: 2021.5.19
@@ -22,14 +21,15 @@ import java.io.FileWriter;
 import java.io.File;
 import java.util.Scanner;
 
-class VA{
+class VATwo{
     public static void main(String[] args) {
         // reads the csv if it already exists to load tasks
         ArrayList<String> tasks = new ArrayList<String>();
         ArrayList<String> dueDates = new ArrayList<String>();
         ArrayList<String> taskList = new ArrayList<String>(); 
         
-        readCSVFile(tasks, dueDates, taskList); // Reads CSV file for incomplete tasks
+        readCSVFile(tasks, dueDates, taskList); // Reads CSV file for incomplete
+        readCompleteCSV(taskList); // reads the CSV with the complete tasks for the arrayList
 
         initalizeMainUI(tasks, dueDates, taskList);
     }
@@ -80,7 +80,7 @@ class VA{
      */
     public static void agenda(JPanel agenda, ArrayList<String> tasks, ArrayList<String> dueDates, ArrayList<String> taskList) { 
         // JTable -----------------------------------------------------
-        DefaultTableModel model = new DefaultTableModel(); // Table column and row data
+        DefaultTableModel model = new DefaultTableModel(); // Table coloum and row data
         model.addColumn("Task Name");
         model.addColumn("Due Date");
         populateModel(model, tasks, dueDates);
@@ -90,9 +90,9 @@ class VA{
         
         // JTable Config
         table.getTableHeader().setResizingAllowed(false); // Cannot resize columns
-        table.getTableHeader().setReorderingAllowed(false); // Cannot reorder columns
+        table.getTableHeader().setReorderingAllowed(false); // Cannot reorder colums
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Always have a scroll bar appear
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures the user cannot multi select rows
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures theuser cannot multi select rows
         agenda.add(sp);
 
         // Button: Add Task -------------------------------------------------
@@ -111,7 +111,6 @@ class VA{
         saveTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent a) {
                 populatetaskList(taskList, table);
-                System.out.println(taskList);
                 saveTask(taskList); // Method that stores all data to file (incomplete tasks)
             }
         });
@@ -135,16 +134,15 @@ class VA{
                             String dataForDue = table.getModel().getValueAt(rowNum, 1).toString();
                             // finding the index of that string in the arrayList to alter and add the COMPLETED note
                             int index = taskList.indexOf(dataForTask + "~" + dataForDue);
-                            // Adding the data from the taskList to the completeTasks array 
+                            // Adding the data from the taskList to the completesTasks array 
                             // with the "Completed" note to the task based on its index
                             completeTasks.add("COMPLETED: " + taskList.get(index));
                             // Removing the completed tasks from the taskList 
                             taskList.remove(index);
-                            System.out.println(completeTasks);
-                            System.out.println(taskList);
 
                             saveTask(taskList); // calling the method to saveTask to update the CSV file
-                            saveComplete(completeTasks);
+                            saveComplete(completeTasks); // calling the method to save the complete tasks to the CSV
+
                             model.removeRow(table.getSelectedRow()); // Send data to file before removing here?
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()); // Bug fix here. JTable would retain some data from removed row
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn() + 1); // These lines here will clear the data before removing the row
@@ -224,11 +222,10 @@ class VA{
             reader.useDelimiter("~");
             while (reader.hasNext()){
                 String line = reader.nextLine();
-                System.out.println(line);
                 taskList.add(line);
                 populateArrays(line, tasks, dueDates);
             }
-            System.out.println("Success: " + taskList);
+            System.out.println("Success reading Task List CSV");
             reader.close();
         }
         catch(IOException e){
@@ -237,6 +234,31 @@ class VA{
         taskList.clear(); // Clears all data in arraylist
     }
 
+    /**
+     * @author - Anissa Rampersaud
+     * Description: Reading through the Complete Tasks CSV and adding those elements to the arrayList 'completeTasks' 
+     * 
+     * @param completeTasks - String arrayList containing all the completed tasks of the user for the time the program runs
+     *                   
+     */
+    public static void readCompleteCSV(ArrayList<String> completeTasks){
+        try{
+            // Setting the file to read
+            File completeFile = new File("Complete_Tasks.csv");
+            Scanner reader = new Scanner(completeFile);
+            reader.useDelimiter("~");
+            while(reader.hasNext()){
+                String line = reader.nextLine(); // reading through each line
+                completeTasks.add(line); // adding each line to the arrayList
+            }
+            // Notifying the user when it's done being read
+            System.out.println("Finished reading Complete Task CSV");
+            reader.close();
+        }
+        catch(IOException e){
+            System.out.println("Error reading CSV");
+        }
+    }
     /**
      * @author - Carl Wang 
      * Method deals with things that appear on the right side of the GUI
@@ -282,8 +304,6 @@ class VA{
         }
         tasks.add(taskString);
         dueDates.add(dueString);
-        System.out.println(tasks);
-        System.out.println(dueDates);
     }
 
     /**
@@ -308,19 +328,15 @@ class VA{
      */
      public static void saveComplete (ArrayList<String> completeTasks){
         try{
-          
-            PrintWriter writeSave = new PrintWriter("Complete_Tasks.csv");
-            writeSave.print("");
-            writeSave.close();
-            
-            //creating a new file and intialize the other packages used
+            // reading through the file to add previous completed tasks
+            readCompleteCSV(completeTasks);
+            // create new file + add data to it like normal
             File completeCSV = new File("Complete_Tasks.csv");        
-            FileWriter fw = new FileWriter(completeCSV, true);
+            FileWriter fw = new FileWriter(completeCSV, false);
             BufferedWriter br = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(br);
-            //for loop goes through each element in the arraylist and prints it onto the file line
+
             for (int i = 0; i < completeTasks.size(); i++) {
-                br.newLine();
                 br.write(completeTasks.get(i));
                 br.newLine();
             }
@@ -338,6 +354,7 @@ class VA{
         catch(IOException e){
             System.out.println("Error writing to Complete_Tasks.csv");
         }
+        completeTasks.clear(); // clearing the arrayList to avoid any repeats when adding new completed tasks
     }
 
     /**
