@@ -38,9 +38,9 @@ class VATwo{
      * @author: Carl Wang 
      * Base of operations for initalizing the UI
      * 
-     * @param tasks - Contains the incomplete task names
-     * @param duedates - Contains the incomplete task due dates
-     * @param taskList - Contains data from both tasks and dueDates
+     * @param tasks - Contains the incomplete task names (ArrayList<String>)
+     * @param duedates - Contains the incomplete task due dates (ArrayList<String>)
+     * @param taskList - Contains data from both tasks and dueDates (ArrayList<String>)
      */
     public static void initalizeMainUI(ArrayList<String> tasks, ArrayList<String> dueDates, ArrayList<String> taskList) {
         // Initalizes GUI window
@@ -48,13 +48,13 @@ class VATwo{
         // Initalizes JPanels: agenda, calendar
         JPanel agenda = new JPanel();
         agenda.setBounds(10, 10, 390, 390);
-        agenda(agenda, tasks, dueDates, taskList);
+        agenda(agenda, tasks, dueDates, taskList); // Adds components
         gui.add(agenda);
         agenda.setLayout(null);
 
         JPanel calendar = new JPanel();
         calendar.setBounds(400, 0, 400, 400);
-        calendar(calendar); 
+        calendar(calendar); // Adds components
         gui.add(calendar);
         calendar.setLayout(null); // No layout
 
@@ -70,29 +70,29 @@ class VATwo{
     /** 
      * @author - Carl Wang
      * @author - Anissa Rampersaud
-     * Description: Method deals with the contents of the gui left side and handles interactions between the GUI and the various
+     * Description: Method deals with the contents of the gui left side (agenda) and handles interactions between the GUI and the various
      * arrayLists for the CSV's i.e taking in user input to store new tasks, remove finished ones, and add those to their specific CSV's
      * 
      * @param agenda - The agenda JPanel
-     * @param tasks - Contains the incomplete task names
-     * @param duedates - Contains the incomplete task due dates
-     * @param taskList - Contains data from both tasks and dueDates
+     * @param tasks - Contains the incomplete task names (ArrayList<String>)
+     * @param duedates - Contains the incomplete task due dates (ArrayList<String>)
+     * @param taskList - Contains data from both tasks and dueDates (ArrayList<String>)
      */
     public static void agenda(JPanel agenda, ArrayList<String> tasks, ArrayList<String> dueDates, ArrayList<String> taskList) { 
         // JTable -----------------------------------------------------
         DefaultTableModel model = new DefaultTableModel(); // Table coloum and row data
         model.addColumn("Task Name");
         model.addColumn("Due Date");
-        populateModel(model, tasks, dueDates);
+        populateModel(model, tasks, dueDates); // Adds data to JTable
         JTable table = new JTable(model);
         JScrollPane sp = new JScrollPane(table);
         sp.setBounds(5, 5, 370, 300);
         
         // JTable Config
         table.getTableHeader().setResizingAllowed(false); // Cannot resize columns
-        table.getTableHeader().setReorderingAllowed(false); // Cannot reorder colums
+        table.getTableHeader().setReorderingAllowed(false); // Cannot reorder columns
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Always have a scroll bar appear
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures theuser cannot multi select rows
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures the user cannot select multiple rows
         agenda.add(sp);
 
         // Button: Add Task ----------------------------------------------
@@ -143,14 +143,14 @@ class VATwo{
                             saveTask(taskList); // calling the method to saveTask to update the CSV file
                             saveComplete(completeTasks); // calling the method to save the complete tasks to the CSV
 
-                            model.removeRow(table.getSelectedRow()); // Send data to file before removing here?
+                            model.removeRow(table.getSelectedRow());
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn()); // Bug fix here. JTable would retain some data from removed row
                             model.setValueAt("", table.getSelectedRow(), table.getSelectedColumn() + 1); // These lines here will clear the data before removing the row
                         }
                     }
                     // Note: After doing multiple trials with these added lines, I couldn't get the bug to happen again, but I can't confirm if the bug is really gone or not...
-                } catch (Exception e) { // If there is no row selected, do nothing
-                    return;
+                } catch (Exception e) { 
+                    return; // If there is no row selected, do nothing
                 }
             }
         });
@@ -208,6 +208,7 @@ class VATwo{
    
     /**
      * @author - Serena Deng 
+     * @author - Carl Wang
      * Method reads the csv file containing the incomplete tasks
      * 
      * @param tasks - an arraylist of the incomplete task names
@@ -218,7 +219,7 @@ class VATwo{
         try{
             File taskFile = new File("Task_List.csv");
             Scanner reader = new Scanner (taskFile);
-            reader.useDelimiter("~");
+            reader.useDelimiter("~"); // ~ is the thing that separates data values
             while (reader.hasNext()){
                 String line = reader.nextLine();
                 taskList.add(line);
@@ -260,7 +261,7 @@ class VATwo{
     }
     /**
      * @author - Carl Wang 
-     * Method deals with things that appear on the right side of the GUI
+     * Method deals with things that appear on the right side of the GUI (calendar and clock)
      * 
      * @param calendar - The JPanel calendar
      */
@@ -280,9 +281,9 @@ class VATwo{
 
     /**
      * @author - Carl Wang
-     * Method takes data from the CSV file and converts it into dataTypes
+     * Method takes data from the CSV file and converts it into dataTypes (ArrayList<String>)
      * 
-     * @param fromFile - Data from the incomplete tasks csv file
+     * @param fromFile - Data from the incomplete tasks csv file (String)
      * @param tasks - Arraylist (String) that will contain the task name
      * @param dueDates - Arraylist (String) that will contain the task due date
     **/
@@ -290,24 +291,26 @@ class VATwo{
         String taskString = "";
         String dueString = "";
 
-        int divider = fromFile.indexOf("~"); // Crucial part of code
-
-        fromFile = fromFile.trim(); // Removes leading and trailing spaces
+        fromFile = fromFile.trim(); // Removes leading and trailing spaces for basic formatting purposes
 
         try{
+            // Crucial part of code. Uses this to determine where to "divide" up the string
+            int divider = fromFile.indexOf("~"); 
             taskString = fromFile.substring(0, divider);
             dueString = fromFile.substring(divider+1, fromFile.length());
         }
         catch (Exception e){
-
+            taskString = "ERROR"; // Returns ERROR if the string does not contain ~
+            dueString = "ERROR";
         }
-        tasks.add(taskString);
+
+        tasks.add(taskString); // Update ArrayList
         dueDates.add(dueString);
     }
 
     /**
      * @author - Carl Wang
-     * Method populates the DefaultTableModel
+     * Method populates the DefaultTableModel (provides JTable with data)
      * 
      * @param model - DefaultTableModel
      * @param tasks - Arraylist (String) that contain the task name
@@ -315,7 +318,7 @@ class VATwo{
     **/
     public static void populateModel (DefaultTableModel model, ArrayList<String> tasks, ArrayList<String> dueDates){
         for (int i = 0; i < tasks.size(); i++){
-            model.addRow(new Object[] {(tasks.get(i)), dueDates.get(i)});
+            model.addRow(new Object[] {(tasks.get(i)), dueDates.get(i)}); // Creates new row with data from CSV file
         }
     }
 
