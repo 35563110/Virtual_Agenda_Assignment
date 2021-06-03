@@ -1,7 +1,7 @@
 /* 
 * Name: Carl, Anissa, Serena, Vincent
 * Date: 2021.5.19
-* Teacher: Mr Ho
+* Teacher: Mr.Ho
 * Description: A virtual agenda
 * */
 
@@ -95,7 +95,7 @@ class VATwo{
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Ensures theuser cannot multi select rows
         agenda.add(sp);
 
-        // Button: Add Task -------------------------------------------------
+        // Button: Add Task ----------------------------------------------
         JButton addTask = new JButton("Add");
         addTask.setBounds(5, 315, 75, 25);
         addTask.addActionListener(new ActionListener() {
@@ -169,20 +169,19 @@ class VATwo{
     }
 
     /**
-     * @author - 
+     * @author - Serena Deng 
      * 
-     * @param taskList contains data about the incomplete task names and due dates
+     * @param taskList writes data on the incomplete task names and due dates
      */
     public static void saveTask(ArrayList<String> taskList) {
         try {
-            // Serena's Code:
             // create file:
             File fileName = new File("Task_List.csv");
             FileWriter fw = new FileWriter(fileName, false);
             BufferedWriter br = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(br);
 
-            // pw.println("Task, Due Date"); // only displayed once, hence outside of for
+            // pw.println("Task, Due Date"); // only displayed once, so it is outside of for
             // loop
             // br.newLine();
             // the for loop iterates through the elements of the array, executing code
@@ -208,12 +207,12 @@ class VATwo{
     }
    
     /**
-     * @author - 
+     * @author - Serena Deng 
      * Method reads the csv file containing the incomplete tasks
      * 
-     * @param tasks - Contains the incomplete task names
-     * @param duedates - Contains the incomplete task due dates
-     * @param taskList - Contains data from both tasks and dueDates
+     * @param tasks - an arraylist of the incomplete task names
+     * @param duedates - an arraylist of the incomplete task due dates
+     * @param taskList - an arraylist of data from both tasks and dueDates
      */
     public static void readCSVFile(ArrayList<String> tasks, ArrayList<String> dueDates, ArrayList<String> taskList){ //remove the parameter as it's not needed to read a file.
         try{
